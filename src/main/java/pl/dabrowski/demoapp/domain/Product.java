@@ -7,11 +7,13 @@ public final class Product {
     private final String id;
     private final String name;
     private final LocalDateTime createAt;
+    private final PriceDto price;
 
-    public Product(String id, String name, LocalDateTime createAt) {
+    public Product(String id, String name, LocalDateTime createAt, PriceDto price) {
         this.id = id;
         this.name = name;
         this.createAt = createAt;
+        this.price = price;
     }
 
     public String getId() {
@@ -26,6 +28,9 @@ public final class Product {
         return createAt;
     }
 
+    public PriceDto getPrice() {
+        return price;
+    }
 
 
     @Override
@@ -34,6 +39,7 @@ public final class Product {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", createAt=" + createAt +
+                ", price=" + price +
                 '}';
     }
 

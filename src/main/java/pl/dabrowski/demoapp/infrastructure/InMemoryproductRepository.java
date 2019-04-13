@@ -30,7 +30,7 @@ class InMemoryproductRepository implements ProductRepository {
     @Override
     public Product update(Product product, String name) {
         if(!products.containsKey(product.getId())) throw  new ExceptionProductNotFound("Wystąpił błąd podczas aktualizacji. Sprawdź, czy id produktu jest poprawne.");
-        products.put(product.getId(), new Product(product.getId(), name, product.getCreateAt()));
+        products.put(product.getId(), new Product(product.getId(), name, product.getCreateAt(), product.getPrice()));
         return products.get(product.getId());
     }
 

@@ -22,7 +22,7 @@ class ProductEndpoint {
         return productFacade.create(productRequestDto);
     }
 
-    @GetMapping(path = "/{id}")/*, method = RequestMethod.GET produces = MediaType.*/
+    @GetMapping(path = "/product-id-{id}")/*, method = RequestMethod.GET produces = MediaType.*/
     ProductResponseDto getProduct(@PathVariable("id") String id){
         return productFacade.findByID(id);
     }
@@ -30,11 +30,11 @@ class ProductEndpoint {
     ProductsListResponseDto getAllProducts(){
         return productFacade.getAll();
     }
-    @PutMapping("/{id}")
+    @PutMapping("/product-id-{id}")
     ProductResponseDto updateProduct(@PathVariable String id, @RequestBody ProductRequestDto productRequestDto){
         return  productFacade.update(id, productRequestDto);
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/product-id-{id}")
     ResponseEntity<Void> deleteproduct(@PathVariable String id){
         return productFacade.delete(id);
     }

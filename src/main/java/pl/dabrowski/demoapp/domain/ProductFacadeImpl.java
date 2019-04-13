@@ -26,14 +26,14 @@ class ProductFacadeImpl implements ProductFacade{
         if(product.equals(null)){
             throw new RuntimeException("Product not exist!!");
         }
-        return new ProductResponseDto(product.getId(), product.getName());
+        return new ProductResponseDto(product.getId(), product.getName(), product.getPrice());
 
     }
 
     @Override
     public ProductsListResponseDto getAll() {
         List<Product> products = productRepository.getAll();
-        return new ProductsListResponseDto(products.stream().map(product -> new ProductResponseDto(product.getId(), product.getName())).collect(Collectors.toList()));
+        return new ProductsListResponseDto(products.stream().map(product -> new ProductResponseDto(product.getId(), product.getName(), product.getPrice())).collect(Collectors.toList()));
     }
 
     @Override
@@ -43,11 +43,11 @@ class ProductFacadeImpl implements ProductFacade{
         }
         String id =UUID.randomUUID().toString();
         LocalDateTime createAt = LocalDateTime.now();
-        Product product = new Product(id, productRequest.getName(), createAt);
+        Product product = new Product(id, productRequest.getName(), createAt, productRequest.getPriceDto());
         // stworzyc produkt
         productRepository.save(product);
 
-        ProductResponseDto responseDto = new ProductResponseDto(product.getId(), product.getName());
+        ProductResponseDto responseDto = new ProductResponseDto(product.getId(), product.getName(), product.getPrice());
         //zapisac gdzies
         //przeemapowac Product na ProductResponse i zwrócić
         return responseDto;
@@ -61,7 +61,7 @@ class ProductFacadeImpl implements ProductFacade{
         Product product = productRepository.findById(id);
         Product updateProduct = productRepository.update(product, productRequestDto.getName());
 
-        return  new ProductResponseDto(updateProduct.getId(), updateProduct.getName());
+        return  new ProductResponseDto(updateProduct.getId(), updateProduct.getName(), updateProduct.getPrice());
     }
 
     @Override

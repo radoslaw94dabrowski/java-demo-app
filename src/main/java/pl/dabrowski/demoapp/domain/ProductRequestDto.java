@@ -8,10 +8,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductRequestDto {
     private final String name;
+    private final PriceDto price;
 
     @JsonCreator
-    public ProductRequestDto(@JsonProperty("name") String name) {
+    public ProductRequestDto(@JsonProperty("name") String name,@JsonProperty("price") PriceDto price) {
         this.name = name;
+        this.price = price;
+    }
+
+
+    public PriceDto getPriceDto() {
+        return price;
     }
 
     public boolean isValid() {
