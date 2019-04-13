@@ -48,7 +48,6 @@ public class ProductEndPointTest extends DemoappApplicationTests {
         ProductsListResponseDto products = result.getBody();
         //then
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
-        //assertThat(products.getProducts().size()).isEqualTo(2);
         assertThat(products.getProducts().get(0).getName()).isEqualTo(productFacade.getAll().getProducts().get(0).getName());
         assertThat(products.getProducts().get(1).getName()).isEqualTo(productFacade.getAll().getProducts().get(1).getName());
     }
