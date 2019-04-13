@@ -51,8 +51,4 @@ public final class Product {
     public int hashCode() {
         return Objects.hash(id, name, createAt);
     }
-
-    public  Product newName(String nameNew){
-        return  new Product(id, nameNew, createAt);
-    }
 }
