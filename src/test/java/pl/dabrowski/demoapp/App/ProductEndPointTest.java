@@ -11,16 +11,19 @@ import org.springframework.http.ResponseEntity;
 import pl.dabrowski.demoapp.DemoappApplicationTests;
 import pl.dabrowski.demoapp.domain.*;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 public class ProductEndPointTest extends DemoappApplicationTests {
     @Autowired
     ProductFacade productFacade;
+    List<TagsDto> exampleTags = List.of(new TagsDto("hot"), new TagsDto("cold"));
 
     @Test
     public void ShouldGetExistProduct() {
         //given
-        ProductRequestDto request = new ProductRequestDto("product", new PriceDto(20.0f, "PLN"));
+        ProductRequestDto request = new ProductRequestDto("product", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         ProductResponseDto existProduct = productFacade.create(request);
         final String url = "http://localhost:" + port + "/products/" +"product-id-" +existProduct.getId();
 
@@ -33,9 +36,9 @@ public class ProductEndPointTest extends DemoappApplicationTests {
     @Test
     public void ShouldGetALLExistProduct() {
         //given
-        ProductRequestDto request1 = new ProductRequestDto("product1", new PriceDto(20f, "PLN"));
+        ProductRequestDto request1 = new ProductRequestDto("product1", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         productFacade.create(request1);
-        ProductRequestDto request2 = new ProductRequestDto("product2", new PriceDto(20f, "PLN"));
+        ProductRequestDto request2 = new ProductRequestDto("product1", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         productFacade.create(request2);
 
         final String url = "http://localhost:" + port + "/products";
@@ -51,7 +54,7 @@ public class ProductEndPointTest extends DemoappApplicationTests {
 
     @Test
     public void ShouldReturn404IfNotExist() {
-        ProductRequestDto request = new ProductRequestDto("product", new PriceDto(20f, "PLN"));
+        ProductRequestDto request = new ProductRequestDto("product", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         final String url = "http://localhost:" + port + "/products/"+"product-id-" + "123";
 
         ResponseEntity<ProductResponseDto> result = httpClient.getForEntity(url, ProductResponseDto.class);
@@ -64,7 +67,7 @@ public class ProductEndPointTest extends DemoappApplicationTests {
     public void ShouldCreateProducts() {
         //given (input)
         final String url = "http://localhost:" + port + "/products";
-        final ProductRequestDto product = new ProductRequestDto("iphone", new PriceDto(20f, "PLN"));
+        final ProductRequestDto product = new ProductRequestDto("iphone", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         String productjson = mapToJson(product);
         //when (to co testujemy)
         ResponseEntity<ProductResponseDto> result = httpClient.postForEntity(url, getHttpRequest(productjson), ProductResponseDto.class);
@@ -76,11 +79,11 @@ public class ProductEndPointTest extends DemoappApplicationTests {
 
     @Test
     public void ShouldUpdateProduct() {
-        ProductRequestDto request = new ProductRequestDto("product", new PriceDto(20f, "PLN"));
+        ProductRequestDto request =new ProductRequestDto("product", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         ProductResponseDto existProduct = productFacade.create(request);
-        final String url = "http://localhost:" + port + "/products/product-id-"+ existProduct.getId();
+        final String url = "http://localhost:" + port + "/products/"+ existProduct.getId();
 
-        ProductRequestDto updateproduct = new ProductRequestDto("update product", new PriceDto(20.0f, "PLN"));
+        ProductRequestDto updateproduct = new ProductRequestDto("update product", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
 
         String productJson = mapToJson(updateproduct);
 
@@ -92,9 +95,9 @@ public class ProductEndPointTest extends DemoappApplicationTests {
     }
     @Test
     public void ShouldDeleteProduct(){
-        ProductRequestDto request = new ProductRequestDto("product", new PriceDto(20.0f, "PLN"));
+        ProductRequestDto request = new ProductRequestDto("product", new PriceDto("20.00", "PLN"),  new ImageDto(""), new DescriptionDto("new product"), exampleTags);
         ProductResponseDto existProduct = productFacade.create(request);
-        final String url = "http://localhost:" + port + "/products/" +"product-id-"+ existProduct.getId();
+        final String url = "http://localhost:" + port + "/products/" + existProduct.getId();
 
         ResponseEntity<Void> result = httpClient.exchange(url, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
 

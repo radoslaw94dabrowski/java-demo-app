@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PriceDto {
-    private final float amount;
+    private final String amount;
     private final String currency;
 
-    public PriceDto(@JsonProperty("amount") float amount,@JsonProperty("currency") String currency) {
+    public PriceDto(@JsonProperty("amount") String amount,@JsonProperty("currency") String currency) {
         this.amount = amount;
         this.currency = currency;
     }
 
-    public float getAmount() {
+    public String getAmount() {
         return amount;
     }
 

@@ -2,12 +2,12 @@ package pl.dabrowski.demoapp.infrastructure;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import pl.dabrowski.demoapp.domain.ExceptionProductNotFound;
-import pl.dabrowski.demoapp.domain.Product;
+import pl.dabrowski.demoapp.domain.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //@Component
 @Repository
@@ -23,21 +23,23 @@ class InMemoryproductRepository implements ProductRepository {
 
     @Override
     public Product findById(String id) {
-        if(!products.containsKey(id)) throw new ExceptionProductNotFound("Produkt o podanym id nie istnieje");
+        if(!products.containsKey(id)) throw new ProductNotFoundException("Produkt o podanym id nie istnieje");
         return products.get(id);
     }
 
     @Override
-    public Product update(Product product, String name) {
-        if(!products.containsKey(product.getId())) throw  new ExceptionProductNotFound("Wystąpił błąd podczas aktualizacji. Sprawdź, czy id produktu jest poprawne.");
-        products.put(product.getId(), new Product(product.getId(), name, product.getCreateAt(), product.getPrice()));
+    public Product update(Product product, String name, PriceDto price, ImageDto image, DescriptionDto description, List<TagsDto> tags) {
+        if(!products.containsKey(product.getId())){
+            throw new ProductNotFoundException("Nie ma takiego produktu!");
+        }
+        products.put(product.getId(), new Product(product.getId(), name, product.getCreateAt(), price, image, description, tags));
         return products.get(product.getId());
     }
 
 
     @Override
     public void delete(String id) {
-        if(!products.containsKey(id)) throw  new ExceptionProductNotFound("Wystąpił błąd podczas usuwania. Sprawdź, czy id produktu jest poprawne.");
+        if(!products.containsKey(id)) throw new ProductNotFoundException("Nie mozna usunac produktu!");
         products.remove(id);
     }
 
@@ -46,4 +48,12 @@ class InMemoryproductRepository implements ProductRepository {
         return  List.copyOf(products.values());
     }
 
+    @Override
+    public List<Product> getAllByTags(String tag) {
+        return products.values()
+                .stream()
+                .filter(p -> p.getTags() != null)
+                .filter(p -> p.getTags().contains(new TagsDto(tag)))
+                .collect(Collectors.toList());
+    }
 }

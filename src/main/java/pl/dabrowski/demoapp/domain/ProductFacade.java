@@ -7,6 +7,9 @@ public interface ProductFacade {
     ProductResponseDto findByID(String id);
     //getAll
     ProductsListResponseDto getAll();
+
+
+    ProductsListResponseDto getAllByTag(String tag);
     //create
     ProductResponseDto create(ProductRequestDto productRequest);
     //update

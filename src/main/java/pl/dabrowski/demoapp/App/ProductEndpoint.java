@@ -1,6 +1,7 @@
 package pl.dabrowski.demoapp.App;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dabrowski.demoapp.domain.*;
@@ -21,21 +22,26 @@ class ProductEndpoint {
     ProductResponseDto createProduct(@RequestBody ProductRequestDto productRequestDto){
         return productFacade.create(productRequestDto);
     }
-
+    @CrossOrigin
     @GetMapping(path = "/product-id-{id}")/*, method = RequestMethod.GET produces = MediaType.*/
     ProductResponseDto getProduct(@PathVariable("id") String id){
         return productFacade.findByID(id);
     }
+    @CrossOrigin
     @GetMapping
-    ProductsListResponseDto getAllProducts(){
-        return productFacade.getAll();
+    ResponseEntity<ProductsListResponseDto> getAllProducts(@RequestParam(value="tag", required=false) String tag){
+        if(tag != null && !tag.isBlank()){
+            return ResponseEntity.status(HttpStatus.OK).body(productFacade.getAllByTag(tag));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(productFacade.getAll());
     }
-    @PutMapping("/product-id-{id}")
-    ProductResponseDto updateProduct(@PathVariable String id, @RequestBody ProductRequestDto productRequestDto){
+
+    @PutMapping("/{id}")
+    ProductResponseDto updateProduct(@PathVariable("id") String id, @RequestBody ProductRequestDto productRequestDto){
         return  productFacade.update(id, productRequestDto);
     }
-    @DeleteMapping("/product-id-{id}")
-    ResponseEntity<Void> deleteproduct(@PathVariable String id){
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteproduct(@PathVariable("id") String id){
         return productFacade.delete(id);
     }
 }
