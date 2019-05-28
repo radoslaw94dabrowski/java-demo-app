@@ -44,4 +44,5 @@ class ProductEndpoint {
     ResponseEntity<Void> deleteproduct(@PathVariable("id") String id){
         return productFacade.delete(id);
     }
+    //Komentarz do commit - usunąć
 }
